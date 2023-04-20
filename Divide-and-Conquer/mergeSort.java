@@ -78,8 +78,8 @@ import java.util.Scanner;
         } else {
             List<Integer> firstHalf = sortArray(inputList.subList(0, len / 2)); // sort the first half
             List<Integer> secondHalf = sortArray(inputList.subList(len / 2, len)); // sort the second half
-            List<Integer> finalOutput = merge(firstHalf, secondHalf); // merge
-            return finalOutput;
+            List<Integer> sortedArray = merge(firstHalf, secondHalf); // merge
+            return sortedArray;
         }
     }
 
