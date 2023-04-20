@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +9,37 @@ import java.util.Scanner;
 
 /*
  * Program to implement the Merge Sort routine
+ * Running Time: O(n log n)
+ * 
+ * =================
+ * The Algorithm:
+ * =================
+ * INPUT: array A of n distinct integers.
+ * OUTPUT: sorted array with the same integers, sorted in ascending order
+ * STEPS:
+ *  1 if input array is of size <= 1, return the array as is
+ *  2 else, recursively sort the first half of A
+ *  3 recursively sort the second half of A
+ *  4 "Merge" the two halves and return the result
+ * 
+ * ====================
+ * Merge Subroutine:
+ * ====================
+ * INPUT: sorted arrays C and D
+ * OUTPUT: sorted array B
+ * STEPS:
+ *  1 set pointers (i, j) and k for the two halves (C, D) and outpur array B
+ *  2 if either array runs of of elements, append the rest of the remaining array
+ *    to the result and return
+ *  3 compare the ith element of C with jth element of D
+ *      - if C[i] < D[j] then
+ *          B[k] := C[i]
+ *          increment i
+ *      - else
+ *          B[k] := D[j]
+ *          increment j
+ *  4 repeat until you run out of elements in either arrays
+ *  5 return the sorted array B
  */
 
  public class mergeSort {
@@ -60,7 +90,7 @@ import java.util.Scanner;
             while (scanner.hasNext()) {
                 inputArray.add(scanner.nextInt());
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return inputArray;
