@@ -37,7 +37,7 @@ import java.util.Scanner;
  *  - return (B, number of inversions)
  */
 
-public class countInversions {
+public class CountInversions {
 
     private static class InversionPair {
         // custom pair object to hold the number of inversions and the sorted array together
@@ -116,7 +116,7 @@ public class countInversions {
 
     public static void main(String[] args) {
         String inputFileName = "IntegerArray.txt";
-        countInversions objCountInversions = new countInversions();
+        CountInversions objCountInversions = new CountInversions();
 
         List<Integer> inputArray = objCountInversions.loadIntegerArrayFromFile(inputFileName);
         InversionPair test = objCountInversions.countArrayInversions(inputArray); 

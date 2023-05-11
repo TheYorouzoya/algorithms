@@ -42,7 +42,7 @@ import java.util.Scanner;
  *  5 return the sorted array B
  */
 
- public class mergeSort {
+ public class MergeSort {
     
     private List<Integer> merge (List<Integer> firstHalf, List<Integer> secondHalf) {
         List<Integer> sorted = new ArrayList<>();
@@ -108,7 +108,7 @@ import java.util.Scanner;
     public static void main (String[] args) {
         String inputFileName = "IntegerArray.txt";
         String outputFileName = "testArraySorted.txt";
-        mergeSort objMergeSort = new mergeSort();
+        MergeSort objMergeSort = new MergeSort();
 
         List<Integer> inputArray = objMergeSort.loadIntegerArrayFromFile(inputFileName);
         List<Integer> outputData = objMergeSort.sortArray(inputArray);

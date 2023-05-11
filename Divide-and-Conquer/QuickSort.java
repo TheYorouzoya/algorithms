@@ -62,7 +62,7 @@ import java.util.Scanner;
  * 
  */
 
-public class quickSort {
+public class QuickSort {
     public int comparisons = 0;
 
     private int partitionArray(List<Integer> inputArray, int left, int right) {
@@ -108,7 +108,7 @@ public class quickSort {
     }
 
     public static void main(String[] args) {
-        quickSort obj = new quickSort();
+        QuickSort obj = new QuickSort();
         List<Integer> inputArray = new ArrayList<>();
         inputArray = obj.loadIntegerArrayFromFile("quickSortTestArray.txt");
         obj.sortArray(inputArray, 0, inputArray.size() - 1);
