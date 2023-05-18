@@ -17,7 +17,61 @@ import java.util.concurrent.ThreadLocalRandom;
  * The Algorithm:
  * =================
  * 
+ * INPUT: An adjacency list containing an undirected graph G with vertices V and edges E.
+ *        Parallel edges are allowed.
  * 
+ * OUTPUT: Compute a cut with the fewest number of crossing edges (i.e., a min cut).
+ * 
+ * STEPS: While there are more than 2 vertices in the graph, repeat the following--
+ *          1. Pick a remaining edge (u, v) uniformly at random
+ *          2. Contract the edge into a single vertex
+ *          3. Remove any self-loops
+ *        Return the cut represented by the final 2 vertices.
+ * 
+ * 
+ * ======================================
+ * About The Randomized Edge Selection:
+ * ======================================
+ * 
+ * Since we need to select an edge uniformly at random, after an edge contracts, the two nodes
+ * need to be represented by a single parent node. To ensure this, we make two copies of the
+ * node array-- one, to select the initial vertex from, after which, we contract this array by
+ * removing the selected node; two, to keep track of the parent node once the two nodes have been
+ * merged together after contraction.
+ * 
+ * The second copy is useful when we need to clean up the self loops after an edge contraction.
+ * 
+ * NOTE: The implementation below uses a recursive algorithm to "look-up" a node's parent.
+ *       Instead of this "look-up", a parent node (supernode) replacement would be much more efficient
+ *       since we do multiple look-ups for every edge contraction.
+ * 
+ * 
+ * =============================
+ * Edge Contraction Subroutine:
+ * =============================
+ * 
+ * INPUT: Two nodes (u, v) and all the edges they point to respectively.
+ * OUTPUT: A single parent node with the edges of (u, v) combined except any edges between u and v
+ *         (i.e., self-loops) are removed.
+ * STEPS: After an edge (u, v) has been selected uniformly at random (here, v would become the parent),
+ *          - Append all the edges in u to the end of v
+ *          - Clean up the resulting edge list by removing self-loops
+ *          - Have u point to v (i.e., alias).
+ *          - Remove u from the first copy of the list of nodes.
+ * 
+ * 
+ * ===============================
+ * Self-loop Clean-Up Subroutine:
+ * ===============================
+ * 
+ * INPUT: A list of edges originating from a given node n.
+ * OUTPUT: The same list but with all the self loops removed.
+ * 
+ * STEPS: Until the edge list is empty-
+ *          - Read an edge node
+ *          - See if this shares a parent with the node n
+ *          - If yes, then remove this node.
+ *        Return the updated list.
  * 
  */
 
@@ -97,7 +151,7 @@ public class KargerMinCut {
         nodeB = adjList.lookupNodeReference(nodeB);
         int nodeBIndex = nodeB - 1;
 
-        // Replace exchange node in the reference list
+        // Assign parent node in the reference list
         adjList.nodesReference.set(nodeA - 1, nodeB);
 
         // Append the first node's linked list to this second edge node
