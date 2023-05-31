@@ -1,7 +1,6 @@
 package Graphs.Literals;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,11 +32,6 @@ public class DirectedGraph {
                 addEdge(Integer.parseInt(fileNodes[0]), Integer.parseInt(fileNodes[1]));
                 edges++;
             }
-            // while(scanner.hasNext()) {
-            //     int node1 = scanner.nextInt();
-            //     int node2 = scanner.nextInt();
-            //     addEdge(node1, node2);
-            //     edges++;
         } catch (IOException e) {
             e.printStackTrace();
         }
