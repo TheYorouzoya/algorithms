@@ -1,12 +1,10 @@
-package Graphs;
-
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
-import Graphs.Literals.DirectedGraph;
+import Literals.DirectedGraph;
 
 public class Kosaraju {
     public int[] firstPass(DirectedGraph inputGraph) {
@@ -14,27 +12,26 @@ public class Kosaraju {
         int N = inputGraph.nodes();
         int currentTime = 1;
         int[] finishingTimes = new int[N];
-        ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
         boolean[] explored = new boolean[N];
 
         for (int i = N - 1; i > 0; i--) {
-            // System.out.println("i is: " + i);
             if (!explored[i]) {
+                ArrayDeque<Integer> finStack = new ArrayDeque<>();
                 stack.push(i);
-                pushEdgesIntoStack(stack, inputGraph.getEdges(i));
-                explored[i] = true;
                 while(!stack.isEmpty()) {
                     int node = stack.pop();
                     if(!explored[node]) {
-                        // System.out.println("Explored: " + node);
                         explored[node] = true;
-                        finishingTimes[currentTime++] = node;
-                        pushEdgesIntoStack(stack, inputGraph.getEdges(node));  
+                        finStack.push(node);
+                        pushEdgesIntoStack(stack, inputGraph.getEdges(node));
                     }
                 }
-                finishingTimes[currentTime++] = i;
+                while(!finStack.isEmpty()) {
+                    int node = finStack.pop();
+                    finishingTimes[currentTime++] = node;
+                }
             }
-            // System.out.println("===============");
         }
         return finishingTimes;
     }
@@ -47,7 +44,7 @@ public class Kosaraju {
         PriorityQueue<Integer> leaders = new PriorityQueue<>(topSCCNum);
 
         for (int i = finishingTimes.length - 1; i > 0; i--) {
-            if(!explored[i]) {
+            if(!explored[finishingTimes[i]]) {
                 int currentSize = 0;
                 stack.push(finishingTimes[i]);
                 while(!stack.isEmpty()) {
@@ -58,7 +55,10 @@ public class Kosaraju {
                     pushEdgesIntoStack(stack, inputGraph.getEdges(node));  
                     }
                 }
-                leaders.add(currentSize);
+                if(leaders.size() > topSCCNum) {
+                    leaders.poll();
+                }
+                leaders.offer(currentSize);
             }
         }
 
@@ -72,32 +72,14 @@ public class Kosaraju {
     }
     
     public static void main(String[] args) {
-        String filename = "Graphs/scc.txt";
+        String filename = "scc.txt";
         int nodes = 875715;
-        
-        long startTime = System.currentTimeMillis();
-        DirectedGraph inputGraph = new DirectedGraph(filename, nodes);
-        long stopTime = System.currentTimeMillis();
-        
-        System.out.println("Done loading graph in: " + (stopTime - startTime) + "ms");
-        
         Kosaraju obj = new Kosaraju();
-
-        startTime = System.currentTimeMillis();
-        DirectedGraph reversedGraph = inputGraph.reverseGraph();
-        stopTime = System.currentTimeMillis();
-        System.out.println("Reversed graph in: " + (stopTime - startTime) + "ms");
         
-        startTime = System.currentTimeMillis();
+        DirectedGraph inputGraph = new DirectedGraph(filename, nodes);
+        DirectedGraph reversedGraph = inputGraph.reverseGraph();
         int[] finishingTimes = obj.firstPass(reversedGraph);
-        stopTime = System.currentTimeMillis();
-        System.out.println("Computed first pass in: " + (stopTime - startTime) + "ms");
-        // System.out.println(Arrays.toString(finishingTimes));
-
-        startTime = System.currentTimeMillis();
         PriorityQueue<Integer> leaders = obj.secondPass(finishingTimes, inputGraph);
-        stopTime = System.currentTimeMillis();
-        System.out.println("Computed second pass in: " + (stopTime - startTime) + "ms");
-        // System.out.println(leaders);
+        System.out.println(leaders);
     }
 }

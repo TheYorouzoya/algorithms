@@ -1,4 +1,4 @@
-package Graphs.Literals;
+package Literals;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,20 +21,38 @@ public class DirectedGraph {
     public DirectedGraph(String filename, int N) {
         this.nodes = N;
         this.edges = 0;
-        adjList = (ArrayList<Integer>[]) new ArrayList[N];
-        for (int i = 0; i < N; i++) {
-            adjList[i] = new ArrayList<>();
-        }
+        final int MAX_BUFFER_SIZE = 1024 * 4;
+        StringBuilder builder = new StringBuilder();
+        char[] buffer = new char[MAX_BUFFER_SIZE];
+        int readChars;
+
         try (BufferedReader scanner = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while((line = scanner.readLine()) != null) {
-                String[] fileNodes = line.split("\\s");
-                addEdge(Integer.parseInt(fileNodes[0]), Integer.parseInt(fileNodes[1]));
-                edges++;
+            while ((readChars = scanner.read(buffer, 0, MAX_BUFFER_SIZE)) > 0) {
+                builder.append(buffer, 0, readChars);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        adjList = (ArrayList<Integer>[]) new ArrayList[nodes];
+        for (int i = 0; i < nodes; i++) {
+            adjList[i] = new ArrayList<>();
+        }
+
+
+        int node[] = new int[2];
+        int i = 0, j = 0, k = 0;
+        for (; i < builder.length(); i++) {
+            if (builder.charAt(i) == ' ') {
+                node[k++] = Integer.parseInt(builder.substring(j, i));
+                j = i + 1;
+            } else if (builder.charAt(i) == '\n') {
+                k = 0;
+                adjList[node[0]].add(node[1]);
+                j = i + 1;
+            }
+        }
+        adjList[node[0]].add(node[1]);
     }
 
     public int nodes() { return this.nodes; }
@@ -49,11 +67,18 @@ public class DirectedGraph {
         edges++;
     }
 
+    public void printGraph() {
+        for(int i = 0; i < nodes; i++) {
+            System.out.println(i + " -> " + adjList[i]);
+        }
+    }
+
     public DirectedGraph reverseGraph() {
         DirectedGraph reverse = new DirectedGraph(nodes);
         for (int i = 0; i < nodes; i++) {
             for(int node : adjList[i]) {
-                reverse.addEdge(node, i);
+                reverse.adjList[node].add(i);
+                reverse.edges++;
             }
         }
         return reverse;
