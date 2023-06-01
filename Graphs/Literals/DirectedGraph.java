@@ -1,3 +1,10 @@
+/*
+ * A Directed Graph that is represented by an adjacency matrix.
+ * Graph contains nodes and integers and edges are stores as an array
+ * of ArrayList.
+ * Only stores the outgoing adjacency list and not the incoming one.
+ */
+
 package Literals;
 
 import java.io.BufferedReader;
@@ -19,8 +26,13 @@ public class DirectedGraph {
     }
 
     public DirectedGraph(String filename, int N) {
+        // Assume the file contains a list of edges as [Integer-Space-Integer-Space] as each
+        // edge per line, i.e., "2 4 "
+
         this.nodes = N;
         this.edges = 0;
+
+        // Load raw string data into StringBuilder
         final int MAX_BUFFER_SIZE = 1024 * 4;
         StringBuilder builder = new StringBuilder();
         char[] buffer = new char[MAX_BUFFER_SIZE];
@@ -34,12 +46,13 @@ public class DirectedGraph {
             e.printStackTrace();
         }
 
+        // Initialize Adjacency list
         adjList = (ArrayList<Integer>[]) new ArrayList[nodes];
         for (int i = 0; i < nodes; i++) {
             adjList[i] = new ArrayList<>();
         }
 
-
+        // Parse the StringBuilder to construct the adjacency list
         int node[] = new int[2];
         int i = 0, j = 0, k = 0;
         for (; i < builder.length(); i++) {
