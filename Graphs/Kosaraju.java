@@ -1,10 +1,28 @@
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.PriorityQueue;
 
 import Literals.DirectedGraph;
+
+/*
+ * Program that implements the Kosaraju Two Pass Algorithm to compute
+ * the 5 largest strongly-connected components in a given directed graph.
+ * 
+ * Running Time: O(m + n) where m and n denote the number of edges and vertices
+ * respectively
+ * 
+ * For large graphs (~1million+ nodes), the major overhead will be loading the
+ * graph into memory to operate on. This approach to load the entire graph into
+ * memory will not work for gigantic graphs.
+ * 
+ * ================
+ * The Algorithm:
+ * ================
+ * 
+ * 
+ * 
+ */
 
 public class Kosaraju {
     public int[] firstPass(DirectedGraph inputGraph) {
