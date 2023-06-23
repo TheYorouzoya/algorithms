@@ -12,41 +12,43 @@ import Literals.DirectedGraph;
  * Running Time: O(m + n) where m and n denote the number of edges and vertices
  * respectively
  * 
- * For large graphs (~1million+ nodes), the major overhead will be loading the
+ * For large graphs (~1 million+ nodes), the major overhead will be loading the
  * graph into memory to operate on. This approach to load the entire graph into
  * memory will not work for gigantic graphs.
- * 
- * ================
- * The Algorithm:
- * ================
- * 
- * 
- * 
  */
 
 public class Kosaraju {
+    // First pass computes the ordering on the reversed input graph
     public int[] firstPass(DirectedGraph inputGraph) {
         // Assume that the graph is already reversed
         int N = inputGraph.nodes();
         int currentTime = 1;
-        int[] finishingTimes = new int[N];
+        int[] finishingTimes = new int[N];  // Array that keeps track of finishing times ordering
         ArrayDeque<Integer> stack = new ArrayDeque<>();
         boolean[] explored = new boolean[N];
 
+        // Run iterative Depth-First Search from the last node in the graph
         for (int i = N - 1; i > 0; i--) {
-            if (!explored[i]) {
-                ArrayDeque<Integer> finStack = new ArrayDeque<>();
+            if (!explored[i]) { // If node isn't explored
+
+                // Stack to store the ordering since iterative DFS reversed the order
+                ArrayDeque<Integer> orderingStack = new ArrayDeque<>();
+                
+                // Push node and start DFS
                 stack.push(i);
                 while(!stack.isEmpty()) {
                     int node = stack.pop();
                     if(!explored[node]) {
                         explored[node] = true;
-                        finStack.push(node);
+                        // Push newly explored node into the ordering stack
+                        orderingStack.push(node);
+                        // Push all the edges into main stack for DFS
                         pushEdgesIntoStack(stack, inputGraph.getEdges(node));
                     }
                 }
-                while(!finStack.isEmpty()) {
-                    int node = finStack.pop();
+                // Once DFS is finished, empty the ordering stack nodes into the finishing times array
+                while(!orderingStack.isEmpty()) {
+                    int node = orderingStack.pop();
                     finishingTimes[currentTime++] = node;
                 }
             }
@@ -54,28 +56,34 @@ public class Kosaraju {
         return finishingTimes;
     }
 
+    // Second pass consumes the finishing time array returned above to run DFS on the original graph
     public PriorityQueue<Integer> secondPass(int[] finishingTimes, DirectedGraph inputGraph) {
-        int topSCCNum = 5;
-        int N = inputGraph.nodes();
+        int topSCCNum = 5;  // number of SCCs to compute
+        int nodes = inputGraph.nodes();
         ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
-        boolean[] explored = new boolean[N];
-        PriorityQueue<Integer> leaders = new PriorityQueue<>(topSCCNum);
+        boolean[] explored = new boolean[nodes];
+        PriorityQueue<Integer> leaders = new PriorityQueue<>(topSCCNum);    // Heap to store top 5 SCCs
 
+        // Run DFS from the end of the finishing times array
         for (int i = finishingTimes.length - 1; i > 0; i--) {
-            if(!explored[finishingTimes[i]]) {
-                int currentSize = 0;
+            if(!explored[finishingTimes[i]]) { // If node is unexplored
+                int currentSize = 0;    // Reset current SCC size
+
+                // Push into stack and start DFS
                 stack.push(finishingTimes[i]);
                 while(!stack.isEmpty()) {
                     int node = stack.pop();
-                    if(!explored[node]) {
+                    if(!explored[node]) {   // Unexplored node
                     explored[node] = true;
                     currentSize++;
                     pushEdgesIntoStack(stack, inputGraph.getEdges(node));  
                     }
                 }
                 if(leaders.size() > topSCCNum) {
+                    // Poll the queue if size overflows
                     leaders.poll();
                 }
+                // Add new size to queue
                 leaders.offer(currentSize);
             }
         }
@@ -83,6 +91,7 @@ public class Kosaraju {
         return leaders;
     }
 
+    // Function that pushes all outgoing edge nodes into the given stack
     private void pushEdgesIntoStack(ArrayDeque<Integer> stack, ArrayList<Integer> edges) {
         for(int node : edges) {
             stack.push(node);

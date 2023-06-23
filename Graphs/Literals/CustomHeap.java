@@ -1,11 +1,17 @@
-package Literals;
 /*
  * A custom min-heap data structure to be used in conjunction with Dijkstra's shortest
  * path algorithm. This heap is one-indexed (rather than zero-indexed) for simplicity
  * of operations. The keys store the current Dijkstra's greedy score for a given vertex.
  * Additionally, it keeps track of the mapping between keys and their respective nodes
  * to support fast lookups for deletion operations.
+ * 
+ * Supported Operations and their running times are as follows:
+ * ExtractMinKey        O(log n)
+ * Insert               O(log n)
+ * DecreaseKey          O(log n)
  */
+
+package Literals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,13 +186,6 @@ public class CustomHeap {
             keys.set(nodeIndex, key);
             heapifyUp(nodeIndex);
         }
-    }
-
-    public void deleteNode(int node) {
-        int index = nodeToIndexMapping.get(node);
-        int lastIndex = keys.size() - 1;
-        swap(index, lastIndex);
-        keys.remove(lastIndex);
     }
 
     public static void main(String[] args) {

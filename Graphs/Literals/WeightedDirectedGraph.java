@@ -1,3 +1,7 @@
+/*
+ * A custom Directed Graph supporting edge weights represented as an adjacency matrix.
+ */
+
 package Literals;
 
 import java.io.BufferedReader;
@@ -7,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeightedDirectedGraph {
+    // Custom edge class to store the endpoint of an edge along with the weight
     public static class Edge {
         private int node, weight;
 
@@ -23,12 +28,19 @@ public class WeightedDirectedGraph {
     private List<List<Edge>> adjList;
 
     public WeightedDirectedGraph(int N) {
+        // Initialize a graph with N nodes
         this.nodes = N;
         this.edges = 0;
         adjList = new ArrayList<List<Edge>>(N);
+
+        for (int i = 0; i <= N; i++) {
+            ArrayList<Edge> blank = new ArrayList<>();
+            adjList.add(blank);
+        }
     }
 
     public WeightedDirectedGraph(int N, String filename) {
+        // Read a graph from a given file
         // Line Structure in file: [Node WhiteSpace [Node,Length WhiteSpace]... repeat]
 
         this.nodes = N;
@@ -40,11 +52,18 @@ public class WeightedDirectedGraph {
             adjList.add(blank);
         }
 
+        // Read data from file into buffer
         try(BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
+            // Until reader reaches end of file
             while((line = reader.readLine()) != null) {
+                // Split line into (node, weight) pairs
                 String[] nodePairs = line.split("\t");
+
+                // First element is the base node
                 int baseNode = Integer.parseInt(nodePairs[0]);
+
+                // Parse all the outgoing edges
                 for(int i = 1; i < nodePairs.length; i++) {
                     String[] edgeLength = nodePairs[i].split(",");
                     Edge edge = new Edge(Integer.parseInt(edgeLength[0]), Integer.parseInt(edgeLength[1]));
