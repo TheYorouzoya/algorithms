@@ -1,4 +1,6 @@
-
+/*
+ * A Job class holding a job/task's weight and length
+ */
 public class Job {
     private int weight;
     private int length;

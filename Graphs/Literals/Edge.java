@@ -1,3 +1,8 @@
+/*
+ * A simple edge class for a graph.
+ * The edge only contains the other end along with the weight.
+ */
+
 package Literals;
 
 public class Edge {

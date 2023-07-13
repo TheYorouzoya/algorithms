@@ -1,3 +1,6 @@
+/*
+ * Custom comparator to sort jobs according to the ratio (Weight/Length)
+ */
 import java.util.Comparator;
 
 class JobRatioComparator implements Comparator<Job> {

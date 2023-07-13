@@ -1,3 +1,6 @@
+/*
+ * Custom comparator to sort Jobs according to the difference (Weight - Length)
+ */
 import java.util.Comparator;
 
 class JobDifferenceComparator implements Comparator<Job> {

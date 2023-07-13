@@ -1,3 +1,8 @@
+/*
+ * An Undirected Graph with edge weights.
+ * Edges are represented as an adjacency matrix.
+ */
+
 package Literals;
 
 import java.io.BufferedReader;
@@ -30,23 +35,33 @@ public class WeightedUndirectedGraph {
             
             String line = reader.readLine();
             String[] pairs = line.split(" ");
+
+            // Get number of nodes and edges from line 1
             this.nodes = Integer.parseInt(pairs[0]);
             this.edges = Integer.parseInt(pairs[0]);
-            adjList = new ArrayList<List<Edge>>(nodes);
 
+            // Initialize adjacency list
+            adjList = new ArrayList<List<Edge>>(nodes);
             for(int i = 0; i <= nodes; i++) {
                 List<Edge> blank = new ArrayList<Edge>();
                 adjList.add(blank);
             }
 
+            // Read and parse the rest of the file
             while((line = reader.readLine()) != null) {
                 pairs = line.split(" ");
                 int node1, node2, weight;
+
+                // Get edge parameters
                 node1 = Integer.parseInt(pairs[0]);
                 node2 = Integer.parseInt(pairs[1]);
                 weight = Integer.parseInt(pairs[2]);
+
+                // Add edge as Node1 -> Node2
                 Edge edge = new Edge(node2, weight);
                 adjList.get(node1).add(edge);
+
+                // Add edge as Node2 -> Node1
                 edge = new Edge(node1, weight);
                 adjList.get(node2).add(edge);
             }
