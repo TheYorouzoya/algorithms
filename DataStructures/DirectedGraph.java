@@ -5,7 +5,7 @@
  * Only stores the outgoing adjacency list and not the incoming one.
  */
 
-package Literals;
+package DataStructures;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

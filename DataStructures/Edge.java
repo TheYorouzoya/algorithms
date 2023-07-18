@@ -3,7 +3,7 @@
  * The edge only contains the other end along with the weight.
  */
 
-package Literals;
+package DataStructures;
 
 public class Edge {
     private int node, weight;

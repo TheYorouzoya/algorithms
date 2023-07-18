@@ -2,7 +2,7 @@
  * A custom Directed Graph supporting edge weights represented as an adjacency matrix.
  */
 
-package Literals;
+package DataStructures;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

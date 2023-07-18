@@ -1,6 +1,11 @@
-import Literals.WeightedUndirectedGraph;
-import Literals.Edge;
-import Literals.CustomHeap;
+/*
+ * Program to implement Prim's Minimum Spanning Trees algorithm using a
+ * custom heap data structure to optimize running time.
+ */
+
+import DataStructures.WeightedUndirectedGraph;
+import DataStructures.Edge;
+import DataStructures.CustomHeap;
 
 public class PrimMST {
     private WeightedUndirectedGraph graph;
@@ -15,9 +20,7 @@ public class PrimMST {
         marked = new boolean[nodes + 1];
     }
 
-    // Ouputs an array which contains positive shortest paths for all nodes
-    // Source node is labelled as 0
-    // If a path to a node does not exist, path length is set to be -1
+    // Output the total cost of the minimum spanning tree for a given graph
     public int computeMSTCost(int sourceNode) {
         // Set source's value as 0 in the heap
         heap.decreaseKey(sourceNode, 0);
@@ -26,13 +29,14 @@ public class PrimMST {
         while (!heap.isEmpty()) {
             // Extract minimum from the heap
             int node = heap.peekMinNode();
+            // Add heap's key to running tree cost
             treeCost += heap.extractMinKey();
-
+            // Mark node as explored
             marked[node] = true;
 
             for (Edge edge : graph.getEdgeList(node)) {
-                if (!marked[edge.getNode()]) {
-                    // Update all the adjacent nodes with the new current shortest path
+                if (!marked[edge.getNode()]) { // If edge isn't already explored
+                    // Update all the adjacent nodes with the new current lowest cost
                     heap.decreaseKey(edge.getNode(), edge.getWeight());
                 }
             }

@@ -3,7 +3,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-import Literals.DirectedGraph;
+import DataStructures.DirectedGraph;
 
 /*
  * Program that implements the Kosaraju Two Pass Algorithm to compute

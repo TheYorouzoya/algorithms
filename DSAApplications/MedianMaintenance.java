@@ -29,8 +29,8 @@
  *          return (sum modulo counter).
  */
 
-import Literals.MaxHeap;
-import Literals.MinHeap;
+import DataStructures.MaxHeap;
+import DataStructures.MinHeap;
 
 import java.io.FileReader;
 import java.io.IOException;

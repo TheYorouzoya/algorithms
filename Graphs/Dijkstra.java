@@ -6,9 +6,9 @@
  * Since the nodes are one-indexed, the program keeps the zeroth position empty for simplicity.
  */
 
-import Literals.WeightedDirectedGraph;
-import Literals.WeightedDirectedGraph.Edge;
-import Literals.CustomHeap;
+import DataStructures.WeightedDirectedGraph;
+import DataStructures.WeightedDirectedGraph.Edge;
+import DataStructures.CustomHeap;
 
 public class Dijkstra {
     private WeightedDirectedGraph graph;

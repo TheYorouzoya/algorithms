@@ -1,4 +1,4 @@
-package Literals;
+package DataStructures;
 
 import java.util.ArrayList;
 
