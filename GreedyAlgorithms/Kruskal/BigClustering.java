@@ -1,12 +1,13 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class BigClustering {
     private String[] labels;
     private int[] table;
-    private int nodes, bitsPerLabel, clusters;
+    private int nodes, bits, clusters;
     private UnionFind set;
 
     public BigClustering(String filename) {
@@ -19,10 +20,11 @@ public class BigClustering {
             String[] data = line.split(" ");
 
             nodes = Integer.parseInt(data[0]);
-            bitsPerLabel = Integer.parseInt(data[1]);
+            bits = Integer.parseInt(data[1]);
 
-            int tableSize = (int) Math.pow(2, bitsPerLabel);
+            int tableSize = (int) Math.pow(2, bits);
             table = new int[tableSize + 1];
+            Arrays.fill(table, -1);
             labels = new String[nodes];
             clusters = nodes;
             set = new UnionFind(nodes);
@@ -40,12 +42,16 @@ public class BigClustering {
 
         for (int i = 0, n = labels.length; i < n; i++) {
             int index = Integer.parseInt(labels[i], 2);
-            table[index] = i + 1;
+            if(table[index] >= 0) {
+                set.union(table[index], i);
+                clusters--;
+            }
+            table[index] = i;
         }
     }
 
     public String[] generateLabelVariants(String label) {
-        int combinations = bitsPerLabel + (bitsPerLabel * (bitsPerLabel - 1)) / 2;
+        int combinations = bits + (bits * (bits - 1)) / 2;
         String[] variants = new String[combinations];
         char[] charArray = label.toCharArray();
         int counter = 0;
@@ -64,12 +70,28 @@ public class BigClustering {
         return variants;
     }
 
-    public void processLabels() {
+    public void bruteForce() {
         for(int i = 0; i < nodes; i++) {
+            for(int j = i + 1; j < nodes; j++) {
+                char[] s1 = labels[i].toCharArray();
+                char[] s2 = labels[j].toCharArray();
+                int counter = 0;
+                for(int k = 0; k < s1.length; k++) {
+                    if((s1[k] ^ s2[k]) == 1) counter++;
+                }
+                if(counter <= 2) {
+                    System.out.println(i + ": " + new String(s1) + "\n" + j + ": " + new String(s2));
+                }
+            }
+        }
+    }
+
+    public void processLabels() {
+        for(int i = 0; i < labels.length; i++) {
             String[] variants = generateLabelVariants(labels[i]);
             for(String label : variants) {
                 int index = table[Integer.parseInt(label, 2)];
-                if(index > 0 && set.union(i + 1, index)) clusters--;
+                if(index >= 0 && set.union(index, i)) clusters--;
             }
         }
     }
@@ -87,7 +109,6 @@ public class BigClustering {
         stop = System.currentTimeMillis();
         System.out.println("Processed clusters in: " + (stop - start) + "ms");
 
-        System.out.println("Max clustering: " + obj.clusters);
-        obj.set.printParents();
+        System.out.println("Max clustering: " + obj.clusters);     
     }
 }
