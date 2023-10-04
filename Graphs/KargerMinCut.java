@@ -1,10 +1,3 @@
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
-
 /*
  * Program to implement the Randomized Contraction algorithm for a given undirected graph
  * Running Time: O(n^2m) (n = nodes, m = edges)
@@ -74,6 +67,15 @@ import java.util.concurrent.ThreadLocalRandom;
  *        Return the updated list.
  * 
  */
+
+package Graphs;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class KargerMinCut {
 

@@ -5,6 +5,7 @@
  * 
  * Since the nodes are one-indexed, the program keeps the zeroth position empty for simplicity.
  */
+package Graphs;
 
 import DataStructures.WeightedDirectedGraph;
 import DataStructures.WeightedDirectedGraph.Edge;
@@ -23,9 +24,22 @@ public class Dijkstra {
         marked = new boolean[nodes + 1];
         paths = new int[nodes + 1];
 
-        // Initialize default path length as -1
+        // Initialize default path length as Integer.MAX_VALUE
         for (int i = 0; i <= nodes; i++) {
-            paths[i] = -1;
+            paths[i] = Integer.MAX_VALUE;
+        }
+    }
+
+    public Dijkstra(WeightedDirectedGraph graph) {
+        this.graph = graph;
+        int nodes = graph.nodes();
+        heap = new CustomHeap(nodes);
+        marked = new boolean[nodes + 1];
+        paths = new int[nodes + 1];
+
+        // Initialize default path length as Integer.MAX_VALUE
+        for (int i = 0; i <= nodes; i++) {
+            paths[i] = Integer.MAX_VALUE;
         }
     }
 
@@ -45,6 +59,8 @@ public class Dijkstra {
             paths[node] = currentDistance;
             marked[node] = true;
 
+            if(currentDistance == Integer.MAX_VALUE) continue;
+
             for (Edge edge : graph.getEdgeList(node)){
                 if (!marked[edge.node()]) {
                     // Update all the adjacent nodes with the new current shortest path
@@ -58,7 +74,7 @@ public class Dijkstra {
     public static void main(String[] args) {
         int nodes = 200;
         int sourceNode = 1;
-        String filename = "dijkstradata.txt";
+        String filename = "Graphs/dijkstradata.txt";
         Dijkstra obj = new Dijkstra(nodes, filename);
         System.out.println("Heap size is: " + obj.heap.size());
 

@@ -25,7 +25,7 @@ public class WeightedDirectedGraph {
     }
 
     private int nodes, edges;
-    private List<List<Edge>> adjList;
+    private ArrayList<List<Edge>> adjList;
 
     public WeightedDirectedGraph(int N) {
         // Initialize a graph with N nodes
@@ -76,6 +76,38 @@ public class WeightedDirectedGraph {
         }
     }
 
+    public WeightedDirectedGraph(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            String[] data;
+
+            if ((line = reader.readLine()) == null) {
+                throw new IOException("Given file " + filename + " is empty.");
+            }
+
+            data = line.split(" ");
+            this.nodes = Integer.parseInt(data[0]);
+            this.edges = Integer.parseInt(data[1]);
+
+            adjList = new ArrayList<List<Edge>>(nodes);
+            for (int i = 0; i <= nodes; i++) {
+                ArrayList<Edge> blank = new ArrayList<>();
+                adjList.add(blank);
+            }
+
+            while ((line = reader.readLine()) != null) {
+                data = line.split(" ");
+                int tail = Integer.parseInt(data[0]);
+                int head = Integer.parseInt(data[1]);
+                int weight = Integer.parseInt(data[2]);
+                adjList.get(tail).add(new Edge(head, weight));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public int nodes() { return this.nodes; }
     public int edges() { return this.edges; }
 
@@ -83,11 +115,15 @@ public class WeightedDirectedGraph {
         return adjList.get(node);
     }
 
+    public void addEdgeList(List<Edge> list, int index) {
+        adjList.set(index, list);
+    }
+
     public void printGraph() {
         for (int i = 1; i <= this.nodes; i++) {
             System.out.print(i + " -> ");
             for(Edge edge : adjList.get(i)) {
-                System.out.print(edge.node + " ");
+                System.out.print(edge.node + "(" + edge.weight + ") ");
             }
             System.out.println();
         }
